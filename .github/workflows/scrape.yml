@@ -1,0 +1,66 @@
+name: 🦞 Scrape EVE Mineral Prices
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 每30分钟运行一次 (UTC)
+    - cron: '*/30 * * * *'
+  workflow_dispatch:  # 手动触发
+
+# 确保同一时间只有一个实例在运行
+concurrency:
+  group: scraper
+  cancel-in-progress: false
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Restore previous data
+        run: |
+          # 确保 data 目录存在，保留已有数据
+          mkdir -p data
+          ls -la data/ || true
+
+      - name: Run scraper
+        run: python3 scraper.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "🦞 小龙虾"
+          git config user.email "xiaolongxia@eve-mineral-tracker.local"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "📭 无数据变化"
+          else
+            git commit -m "🦞 数据更新 $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git push
+            echo "✅ 数据已提交"
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霹雳的EVE欧服市场</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-dim:#8b949e;
+    --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d2991d; --purple:#a371f7;
+    --buy-color:#f0883e; --sell-color:#3fb950;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+  .container{max-width:1200px;margin:0 auto;padding:20px}
+  header{text-align:center;margin-bottom:20px}
+  header h1{font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+  header .subtitle{color:var(--text-dim);font-size:13px;margin-top:2px}
+
+  /* Period Switcher */
+  .period-bar{display:flex;justify-content:center;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+  .period-btn{padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;user-select:none}
+  .period-btn:hover{border-color:var(--accent);color:var(--text)}
+  .period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* Tabs */
+  .tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;justify-content:center}
+  .tab{padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;user-select:none;display:flex;align-items:center;gap:5px}
+  .tab img{width:20px;height:20px;border-radius:2px}
+  .tab:hover{border-color:var(--accent);color:var(--text)}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* Stats */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:20px}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px}
+  .stat-card .label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;display:flex;align-items:center;gap:5px}
+  .stat-card .label img{width:18px;height:18px;border-radius:2px}
+  .stat-card .value{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.stat-card .value.sz-md{font-size:17px}.stat-card .value.sz-sm{font-size:14px}.stat-card .value.sz-xs{font-size:12px}
+  .stat-card .sub{font-size:12px;margin-top:1px;font-variant-numeric:tabular-nums}
+  .stat-card .extra{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;gap:16px;font-size:11px}
+  .stat-card .extra span{display:inline-flex;flex-direction:column}
+  .stat-card .extra .label2{color:var(--text-dim);font-size:10px}
+  .stat-card.buy .value{color:var(--buy-color)}
+  .stat-card.sell .value{color:var(--sell-color)}
+  .up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--text-dim)}
+
+  /* Chart */
+  .chart-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:20px}
+  .chart-box h2{font-size:15px;margin-bottom:10px;color:var(--text-dim);font-weight:500}
+  .chart-box canvas{max-height:280px}
+
+  /* Table */
+  .table-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:20px;overflow-x:auto}
+  .table-box h2{font-size:15px;margin-bottom:10px;color:var(--text-dim);font-weight:500}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap}
+  th{color:var(--text-dim);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  td:first-child,th:first-child{text-align:left}
+  td.date-col{color:var(--text-dim);font-size:12px}
+  td.high-val{color:var(--red)} td.low-val{color:var(--green)}
+  footer{text-align:center;color:var(--text-dim);font-size:11px;margin-top:12px}
+  .loading{text-align:center;color:var(--text-dim);padding:60px 0;font-size:15px}
+  .loading::before{content:"🦞";display:block;font-size:44px;margin-bottom:10px;animation:bounce 1s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🦞 霹雳的EVE欧服市场</h1>
+    <p class="subtitle">数据来源: Janice (Jita 4-4) · <span id="updateTime">加载中...</span></p>
+  </header>
+
+  <!-- 周期切换 -->
+  <div class="period-bar" id="periodBar"></div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="stats-grid" id="stats"></div>
+
+  <div class="chart-box">
+    <h2>📈 价格走势 — <span id="chartTitle">24小时</span></h2>
+    <canvas id="priceChart"></canvas>
+  </div>
+
+  <div class="table-box">
+    <h2>📊 历史极值</h2>
+    <table id="extremesTable">
+      <thead><tr><th>周期</th><th>最高买入价</th><th>日期</th><th>最低卖出价</th><th>日期</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <footer>🦞 小龙虾每30分钟自动采集 · Janice (Jita 4-4)</footer>
+</div>
+
+<script>
+// ====== 常量 ======
+const MINERALS = ["Tritanium","Pyerite","Mexallon","Isogen","Nocxium","Zydrine","Megacyte","Morphite","PLEX","Skill Extractor","Large Skill Injector"];
+const TYPE_IDS = { Tritanium:34, Pyerite:35, Mexallon:36, Isogen:37, Nocxium:38, Zydrine:39, Megacyte:40, Morphite:11399, PLEX:44992, "Skill Extractor":40520, "Large Skill Injector":45635 };
+const PERIODS_EXTREME = [
+  { label:"7天", days:7 }, { label:"15天", days:15 }, { label:"30天", days:30 },
+  { label:"3个月",days:90 }, { label:"6个月",days:180 }, { label:"12个月",days:365 },
+];
+
+// 图表周期配置
+const CHART_PERIODS = [
+  { id:"24h",  label:"24小时", ms:24*3600*1000,   bucket:"30min" },
+  { id:"7d",   label:"7天",    ms:7*24*3600*1000,  bucket:"1h" },
+  { id:"15d",  label:"15天",   ms:15*24*3600*1000, bucket:"12h" },
+  { id:"30d",  label:"30天",   ms:30*24*3600*1000, bucket:"1d" },
+  { id:"3mo",  label:"3个月",  ms:90*24*3600*1000, bucket:"1d" },
+  { id:"1yr",  label:"1年",    ms:365*24*3600*1000,bucket:"1d" },
+];
+let currentPeriod = "24h";
+
+function iconUrl(name){ return `https://images.evetech.net/types/${TYPE_IDS[name]}/icon?size=32`; }
+
+let allDaily = {}, allIntra = {};
+let currentMineral = "Tritanium";
+let chart = null;
+
+// ====== 数据加载 ======
+async function loadData() {
+  try {
+    const [dResp, iResp] = await Promise.all([
+      fetch("data/prices.json"),
+      fetch("data/intraday.json"),
+    ]);
+    if (!dResp.ok && !iResp.ok) throw new Error("无数据");
+    if (dResp.ok) allDaily = await dResp.json();
+    if (iResp.ok) allIntra = await iResp.json();
+    document.getElementById("updateTime").textContent = "最后更新: " + new Date().toLocaleString("zh-CN");
+    init();
+  } catch(e) {
+    document.body.innerHTML = `<div class="container"><header><h1>🦞 EVE 欧服矿物价格</h1></header>
+      <div class="loading"><p>暂无数据</p><p style="font-size:13px;margin-top:10px">请先运行: <code style="background:var(--surface);padding:3px 8px;border-radius:4px">python3 scraper.py</code></p></div></div>`;
+  }
+}
+
+function init(){
+  buildPeriodBar();
+  buildTabs();
+  selectMineral(currentMineral);
+}
+
+// ====== 周期切换 ======
+function buildPeriodBar(){
+  document.getElementById("periodBar").innerHTML = CHART_PERIODS.map(p =>
+    `<span class="period-btn${p.id===currentPeriod?' active':''}" data-period="${p.id}" onclick="selectPeriod('${p.id}')">${p.label}</span>`
+  ).join("");
+}
+
+function selectPeriod(pid){
+  currentPeriod = pid;
+  document.querySelectorAll(".period-btn").forEach(b=>b.classList.toggle("active",b.dataset.period===pid));
+  const cfg = CHART_PERIODS.find(p=>p.id===pid);
+  document.getElementById("chartTitle").textContent = cfg ? cfg.label : pid;
+  renderChart();
+}
+
+// ====== 标签页 ======
+function buildTabs(){
+  document.getElementById("tabs").innerHTML = MINERALS.map(m =>
+    `<span class="tab${m===currentMineral?' active':''}" data-mineral="${m}" onclick="selectMineral('${m}')"><img src="${iconUrl(m)}" alt="">${m}</span>`
+  ).join("");
+}
+
+function selectMineral(name){
+  currentMineral = name;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.mineral===name));
+  renderStats(); renderChart(); renderExtremes();
+}
+
+// ====== 工具函数 ======
+function getDaily(){ return (allDaily[currentMineral]||[]).slice(); }
+function getIntra(){ return (allIntra[currentMineral]||[]).slice(); }
+function avg(arr){ return arr.length ? arr.reduce((s,v)=>s+v,0)/arr.length : 0; }
+function _v(d,k){ return d[k]!=null ? d[k] : (d.avg||0); }
+
+function formatISK(n){
+  if(n==null||isNaN(n)) return "—";
+  return Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function sizeClass(n){
+  // 根据数字长度返回合适的字体 class
+  if(n==null||isNaN(n)) return "";
+  const s = formatISK(n);
+  if(s.length > 18) return "sz-xs";
+  if(s.length > 14) return "sz-sm";
+  if(s.length > 10) return "sz-md";
+  return "";
+}
+function formatVol(n){
+  if(n==null||isNaN(n)||n===0) return "—";
+  if(n>=1_000_000_000) return (n/1_000_000_000).toFixed(2)+"B";
+  if(n>=1_000_000) return (n/1_000_000).toFixed(2)+"M";
+  if(n>=1_000) return (n/1_000).toFixed(2)+"K";
+  return Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
+}
+function pctStr(v){
+  if(v==null||isNaN(v)) return "—";
+  return (v>=0?"+":"")+v.toFixed(2)+"%";
+}
+function clr(v){ return v>0?"up":v<0?"down":"flat"; }
+function sym(v){ return v>=0?"▲":"▼"; }
+
+// 解析 ISO 时间字符串为 Date
+function parseDT(s){
+  if(!s) return new Date();
+  // 兼容 "2026-05-07" 和 "2026-05-07T02:17:00Z"
+  if(s.length===10) return new Date(s+"T00:00:00Z");
+  return new Date(s);
+}
+
+// ====== 图表数据聚合 ======
+function aggregateChartData(){
+  const daily = getDaily();
+  const intra = getIntra();
+  const now = new Date();
+  const cfg = CHART_PERIODS.find(p=>p.id===currentPeriod);
+  const cutoff = new Date(now.getTime() - cfg.ms);
+
+  let points = [];
+
+  if(cfg.bucket === "30min"){
+    // 24小时: 取日内数据，每30分钟一个点
+    points = intra.filter(d=>parseDT(d.dt) >= cutoff).map(d=>({
+      time: d.dt, label: fmtTime(d.dt,"hm"),
+      buy: d.buy, sell: d.sell, avg: d.avg,
+    }));
+  } else if(cfg.bucket === "1h"){
+    // 7天: 日内数据聚合到每小时
+    points = bucketAgg(intra, cutoff, 3600*1000, "hm");
+  } else if(cfg.bucket === "12h"){
+    // 15天: 日内+日级混合
+    points = bucketAgg(intra, cutoff, 12*3600*1000, "mdh");
+    // 补充日级数据（日内覆盖不到的早期部分）
+    const intraCutoff = new Date(now.getTime() - 8*24*3600*1000);
+    const extraDaily = daily.filter(d=>{
+      const dt = parseDT(d.date);
+      return dt >= cutoff && dt < intraCutoff;
+    }).map(d=>({
+      time: d.date, label: d.date.slice(5),
+      buy: _v(d,"buy"), sell: _v(d,"sell"), avg: _v(d,"avg"),
+    }));
+    points = [...extraDaily, ...points].sort((a,b)=>a.time.localeCompare(b.time));
+  } else {
+    // 日级: 30天/3月/1年
+    points = daily.filter(d=>parseDT(d.date) >= cutoff).map(d=>({
+      time: d.date, label: d.date.slice(5),
+      buy: _v(d,"buy"), sell: _v(d,"sell"), avg: _v(d,"avg"),
+    }));
+  }
+
+  return points;
+}
+
+function bucketAgg(intra, cutoff, bucketMs, labelFmt){
+  const buckets = {};
+  intra.forEach(d=>{
+    const dt = parseDT(d.dt);
+    if(dt < cutoff) return;
+    const key = Math.floor(dt.getTime()/bucketMs)*bucketMs;
+    if(!buckets[key]) buckets[key] = { buys:[], sells:[], avgs:[] };
+    buckets[key].buys.push(d.buy);
+    buckets[key].sells.push(d.sell);
+    buckets[key].avgs.push(d.avg);
+  });
+  return Object.entries(buckets).map(([key,v])=>{
+    const d = new Date(parseInt(key));
+    return {
+      time: d.toISOString(),
+      label: fmtTime(d.toISOString(), labelFmt),
+      buy: avg(v.buys), sell: avg(v.sells), avg: avg(v.avgs),
+    };
+  }).sort((a,b)=>a.time.localeCompare(b.time));
+}
+
+function fmtTime(ts, fmt){
+  const d = parseDT(ts);
+  const pad = n=>String(n).padStart(2,"0");
+  const h = pad(d.getUTCHours()), m = pad(d.getUTCMinutes());
+  const mo = pad(d.getUTCMonth()+1), day = pad(d.getUTCDate());
+  if(fmt==="hm") return h+":"+m;
+  if(fmt==="mdh") return mo+"/"+day+" "+h+":"+m;
+  return mo+"/"+day;
+}
+
+// ====== 统计卡片 ======
+function renderStats(){
+  const daily = getDaily();
+  if(!daily.length){ document.getElementById("stats").innerHTML=""; return; }
+
+  const cur  = daily[daily.length-1];
+  const prev = daily.length>1 ? daily[daily.length-2] : null;
+  const last7 = daily.slice(-7), last30 = daily.slice(-30);
+
+  const buy=_v(cur,"buy"), sell=_v(cur,"sell"), av=_v(cur,"avg");
+  const buyPrev=prev?_v(prev,"buy"):buy, sellPrev=prev?_v(prev,"sell"):sell;
+  const buyCh=buy-buyPrev, sellCh=sell-sellPrev;
+  const buyPct=buyPrev?(buyCh/buyPrev)*100:0, sellPct=sellPrev?(sellCh/sellPrev)*100:0;
+
+  const buy7=daily.length>=7?_v(daily[daily.length-7],"buy"):buy;
+  const buy30=daily.length>=30?_v(daily[daily.length-30],"buy"):buy;
+  const sell7=daily.length>=7?_v(daily[daily.length-7],"sell"):sell;
+  const sell30=daily.length>=30?_v(daily[daily.length-30],"sell"):sell;
+  const buyCh7=buy7?((buy-buy7)/buy7)*100:0, buyCh30=buy30?((buy-buy30)/buy30)*100:0;
+  const sellCh7=sell7?((sell-sell7)/sell7)*100:0, sellCh30=sell30?((sell-sell30)/sell30)*100:0;
+
+  const avg7=avg(last7.map(d=>_v(d,"avg"))), avg30=avg(last30.map(d=>_v(d,"avg")));
+  const ic = iconUrl(currentMineral);
+
+  // 真实需求数据
+  const bd = cur.buy_demand || {}, sd = cur.sell_demand || {};
+
+  document.getElementById("stats").innerHTML = `
+    <div class="stat-card buy">
+      <div class="label"><img src="${ic}" alt=""> 收购价 (Buy)</div>
+      <div class="value ${sizeClass(buy)}">${formatISK(buy)} ISK</div>
+      <div class="sub ${clr(buyCh)}">${sym(buyCh)} ${formatISK(Math.abs(buyCh))} (${pctStr(buyPct)})</div>
+      <div class="extra"><span><span class="label2">7日涨跌</span><span class="${clr(buyCh7)}">${pctStr(buyCh7)}</span></span><span><span class="label2">30日涨跌</span><span class="${clr(buyCh30)}">${pctStr(buyCh30)}</span></span></div>
+    </div>
+    <div class="stat-card sell">
+      <div class="label"><img src="${ic}" alt=""> 出售价 (Sell)</div>
+      <div class="value ${sizeClass(sell)}">${formatISK(sell)} ISK</div>
+      <div class="sub ${clr(sellCh)}">${sym(sellCh)} ${formatISK(Math.abs(sellCh))} (${pctStr(sellPct)})</div>
+      <div class="extra"><span><span class="label2">7日涨跌</span><span class="${clr(sellCh7)}">${pctStr(sellCh7)}</span></span><span><span class="label2">30日涨跌</span><span class="${clr(sellCh30)}">${pctStr(sellCh30)}</span></span></div>
+    </div>
+    <div class="stat-card">
+      <div class="label"><img src="${ic}" alt=""> 均价 (Split)</div>
+      <div class="value ${sizeClass(av)}">${formatISK(av)} ISK</div>
+      <div class="sub" style="color:var(--text-dim)">(收购+出售)/2</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">📊 7日 / 30日均价</div>
+      <div class="value ${sizeClass(avg7)}">${formatISK(avg7)}</div>
+      <div class="sub" style="color:var(--text-dim)">30日: ${formatISK(avg30)} ISK</div>
+    </div>
+    <div class="stat-card buy">
+      <div class="label">📈 真实收购需求</div>
+      <div class="value ${sizeClass(bd.value||0)}">${formatISK(bd.value||0)} ISK</div>
+      <div class="sub" style="color:var(--text-dim)">${bd.orders||0}单 · ${formatVol(bd.volume||0)}个 · 24h成交 ${formatVol(bd.volume_24h||0)}</div>
+    </div>
+    <div class="stat-card sell">
+      <div class="label">📉 真实出售需求</div>
+      <div class="value ${sizeClass(sd.value||0)}">${formatISK(sd.value||0)} ISK</div>
+      <div class="sub" style="color:var(--text-dim)">${sd.orders||0}单 · ${formatVol(sd.volume||0)}个 · 24h成交 ${formatVol(sd.volume_24h||0)}</div>
+    </div>
+  `;
+}
+
+// ====== 图表 ======
+function sma(arr,w){
+  const r=[];
+  for(let i=0;i<arr.length;i++){const s=arr.slice(Math.max(0,i-w+1),i+1);r.push(s.reduce((a,b)=>a+b,0)/s.length)}
+  return r;
+}
+
+function renderChart(){
+  const points = aggregateChartData();
+  if(!points.length) return;
+
+  const labels = points.map(p=>p.label);
+  const buyArr = points.map(p=>p.buy);
+  const sellArr= points.map(p=>p.sell);
+  const avgArr = points.map(p=>p.avg);
+
+  // MA 仅在日级视图显示
+  const isDaily = ["1d"].includes(CHART_PERIODS.find(p=>p.id===currentPeriod)?.bucket||"");
+  const ma7  = isDaily ? sma(avgArr,7) : null;
+  const ma30 = isDaily ? sma(avgArr,30) : null;
+
+  const ctx = document.getElementById("priceChart").getContext("2d");
+  if(chart) chart.destroy();
+
+  const datasets = [
+    { label:"收购价", data:buyArr, borderColor:"#f0883e", backgroundColor:"rgba(240,136,62,0.06)", fill:true, tension:.3, pointRadius:0, borderWidth:2 },
+    { label:"均价",   data:avgArr,  borderColor:"#58a6ff", backgroundColor:"rgba(88,166,255,0.06)", fill:true, tension:.3, pointRadius:0, borderWidth:2 },
+    { label:"出售价", data:sellArr, borderColor:"#3fb950", backgroundColor:"rgba(63,185,80,0.06)", fill:true, tension:.3, pointRadius:0, borderWidth:2 },
+  ];
+  if(ma7) datasets.push({ label:"7日均线", data:ma7, borderColor:"#d2991d", borderWidth:1.2, tension:.3, pointRadius:0, borderDash:[4,3], fill:false });
+  if(ma30) datasets.push({ label:"30日均线", data:ma30, borderColor:"#a371f7", borderWidth:1.2, tension:.3, pointRadius:0, borderDash:[7,4], fill:false });
+
+  chart = new Chart(ctx, {
+    type:"line", data:{ labels, datasets },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:"index", intersect:false },
+      plugins:{
+        legend:{ labels:{ color:"#8b949e", usePointStyle:true, pointStyleWidth:10, padding:16, font:{size:11} } },
+        tooltip:{ callbacks:{ label(ctx){ return ctx.dataset.label+": "+formatISK(ctx.parsed.y)+" ISK"; } } },
+      },
+      scales:{
+        x:{ ticks:{ color:"#484f58", maxTicksLimit:14, maxRotation:45 }, grid:{ color:"#21262d" } },
+        y:{ ticks:{ color:"#8b949e", callback:v=>formatISK(v)+" ISK" }, grid:{ color:"#21262d" } },
+      },
+    },
+  });
+}
+
+// ====== 历史极值 ======
+function renderExtremes(){
+  const daily = getDaily();
+  const tbody = document.querySelector("#extremesTable tbody");
+  if(!daily.length){ tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--text-dim)">暂无数据</td></tr>`; return; }
+
+  tbody.innerHTML = PERIODS_EXTREME.map(p=>{
+    const slice = daily.slice(-p.days);
+    if(!slice.length) return `<tr><td>${p.label}</td><td colspan="4" style="text-align:center;color:var(--text-dim)">数据不足</td></tr>`;
+    let hi=slice[0], lo=slice[0];
+    slice.forEach(d=>{ if(_v(d,"buy")>_v(hi,"buy"))hi=d; if(_v(d,"sell")<_v(lo,"sell"))lo=d; });
+    return `<tr><td>${p.label}</td><td class="high-val">${formatISK(_v(hi,"buy"))} ISK</td><td class="date-col">${hi.date}</td><td class="low-val">${formatISK(_v(lo,"sell"))} ISK</td><td class="date-col">${lo.date}</td></tr>`;
+  }).join("");
+}
+
+loadData();
+</script>
+</body>
+</html>
