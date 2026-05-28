@@ -381,19 +381,19 @@
     {
       "date": "2026-05-28",
       "buy": 3.82,
-      "sell": 3.94,
-      "avg": 3.88,
+      "sell": 3.83,
+      "avg": 3.83,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 44123657246.94001,
+        "orders": 62,
+        "volume": 13562136013,
+        "volume_24h": 3916501695
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 67332833782.32999,
+        "orders": 107,
+        "volume": 16704536247,
+        "volume_24h": 3916501695
       }
     }
   ],
@@ -778,20 +778,20 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 18.31,
-      "sell": 18.63,
-      "avg": 18.47,
+      "buy": 18.34,
+      "sell": 18.66,
+      "avg": 18.5,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 80599690572.12001,
+        "orders": 71,
+        "volume": 4797199035,
+        "volume_24h": 2970469876
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 38267655809.47,
+        "orders": 67,
+        "volume": 1879325962,
+        "volume_24h": 2970469876
       }
     }
   ],
@@ -1176,20 +1176,20 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 57.5,
-      "sell": 59.7,
-      "avg": 58.6,
+      "buy": 57.64,
+      "sell": 59.58,
+      "avg": 58.61,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 40477881325.74,
+        "orders": 67,
+        "volume": 776283561,
+        "volume_24h": 510491382
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 96317310569.70007,
+        "orders": 141,
+        "volume": 1468938773,
+        "volume_24h": 510491382
       }
     }
   ],
@@ -1574,20 +1574,20 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 240.2,
-      "sell": 253.0,
-      "avg": 246.6,
+      "buy": 242.5,
+      "sell": 253.9,
+      "avg": 248.2,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 79730391046.49997,
+        "orders": 114,
+        "volume": 395406406,
+        "volume_24h": 190973592
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 147161743580.10004,
+        "orders": 70,
+        "volume": 443558267,
+        "volume_24h": 190973592
       }
     }
   ],
@@ -1972,20 +1972,20 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 740.5,
-      "sell": 763.7,
-      "avg": 752.1,
+      "buy": 746.1,
+      "sell": 763.4,
+      "avg": 754.75,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 57282569185.5,
+        "orders": 94,
+        "volume": 94366670,
+        "volume_24h": 49813724
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 204591972360.6,
+        "orders": 138,
+        "volume": 230018290,
+        "volume_24h": 49813724
       }
     }
   ],
@@ -2370,20 +2370,20 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 1362.0,
-      "sell": 1504.0,
-      "avg": 1433.0,
+      "buy": 1402.0,
+      "sell": 1505.0,
+      "avg": 1453.5,
       "buy_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 38686655945.0,
+        "orders": 72,
+        "volume": 31541068,
+        "volume_24h": 19644713
       },
       "sell_demand": {
-        "value": 0,
-        "orders": 0,
-        "volume": 0,
-        "volume_24h": 0
+        "value": 54886134951.0,
+        "orders": 42,
+        "volume": 33600884,
+        "volume_24h": 19644713
       }
     }
   ],
@@ -2768,19 +2768,19 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 2811.0,
-      "sell": 3043.0,
-      "avg": 2927.0,
+      "buy": 2870.0,
+      "sell": 3041.0,
+      "avg": 2955.5,
       "buy_demand": {
-        "value": 26220315242.0,
-        "orders": 57,
-        "volume": 10898290,
+        "value": 29843829385.0,
+        "orders": 71,
+        "volume": 12180599,
         "volume_24h": 10645933
       },
       "sell_demand": {
-        "value": 68773327240.0,
-        "orders": 32,
-        "volume": 21072008,
+        "value": 65640511897.0,
+        "orders": 29,
+        "volume": 20045562,
         "volume_24h": 10645933
       }
     }
@@ -3166,19 +3166,19 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 21400.0,
-      "sell": 22940.0,
-      "avg": 22170.0,
+      "buy": 21460.0,
+      "sell": 22970.0,
+      "avg": 22215.0,
       "buy_demand": {
-        "value": 127704000135.0,
-        "orders": 78,
-        "volume": 6894528,
+        "value": 110810590435.0,
+        "orders": 77,
+        "volume": 6066665,
         "volume_24h": 3785407
       },
       "sell_demand": {
-        "value": 159303815180.0,
-        "orders": 55,
-        "volume": 6410413,
+        "value": 156412398730.0,
+        "orders": 53,
+        "volume": 6284466,
         "volume_24h": 3785407
       }
     }
@@ -3564,9 +3564,9 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 4556000.0,
-      "sell": 4773000.0,
-      "avg": 4664500.0,
+      "buy": 4548000.0,
+      "sell": 4772000.0,
+      "avg": 4660000.0,
       "buy_demand": {
         "value": 0,
         "orders": 0,
@@ -3962,19 +3962,19 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 438200000.0,
-      "sell": 462900000.0,
-      "avg": 450550000.0,
+      "buy": 428200000.0,
+      "sell": 461000000.0,
+      "avg": 444600000.0,
       "buy_demand": {
-        "value": 980005532769.0,
-        "orders": 112,
-        "volume": 104264,
+        "value": 974089299769.0,
+        "orders": 114,
+        "volume": 104245,
         "volume_24h": 2863
       },
       "sell_demand": {
-        "value": 2123868000000.0,
-        "orders": 183,
-        "volume": 2696,
+        "value": 2128068500000.0,
+        "orders": 184,
+        "volume": 2702,
         "volume_24h": 2863
       }
     }
@@ -4360,19 +4360,19 @@
     },
     {
       "date": "2026-05-28",
-      "buy": 720100000.0,
-      "sell": 751300000.0,
-      "avg": 735700000.0,
+      "buy": 721600000.0,
+      "sell": 751100000.0,
+      "avg": 736350000.0,
       "buy_demand": {
-        "value": 8860791400.0,
-        "orders": 25,
-        "volume": 111309,
+        "value": 7994791400.0,
+        "orders": 22,
+        "volume": 111303,
         "volume_24h": 263
       },
       "sell_demand": {
-        "value": 111861600000.0,
-        "orders": 41,
-        "volume": 720,
+        "value": 101729200000.0,
+        "orders": 36,
+        "volume": 653,
         "volume_24h": 263
       }
     }
