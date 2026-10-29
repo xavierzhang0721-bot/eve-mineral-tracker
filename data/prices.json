@@ -3149,6 +3149,24 @@
         "volume": 8708270491,
         "volume_24h": 4342096568
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 3.78,
+      "sell": 3.92,
+      "avg": 3.85,
+      "buy_demand": {
+        "value": 20211359181.760002,
+        "orders": 44,
+        "volume": 5639759194,
+        "volume_24h": 4342096568
+      },
+      "sell_demand": {
+        "value": 31808751454.55,
+        "orders": 46,
+        "volume": 7904778769,
+        "volume_24h": 4342096568
+      }
     }
   ],
   "Pyerite": [
@@ -6299,6 +6317,24 @@
         "value": 156179619290.83997,
         "orders": 134,
         "volume": 8956338746,
+        "volume_24h": 2978910876
+      }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 15.99,
+      "sell": 16.04,
+      "avg": 16.02,
+      "buy_demand": {
+        "value": 67571295694.66999,
+        "orders": 47,
+        "volume": 4661886861,
+        "volume_24h": 2978910876
+      },
+      "sell_demand": {
+        "value": 148936997152.44,
+        "orders": 132,
+        "volume": 8507648324,
         "volume_24h": 2978910876
       }
     }
@@ -9453,6 +9489,24 @@
         "volume": 1975888473,
         "volume_24h": 640572278
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 48.56,
+      "sell": 51.43,
+      "avg": 50.0,
+      "buy_demand": {
+        "value": 33707657281.24,
+        "orders": 49,
+        "volume": 756642115,
+        "volume_24h": 640572278
+      },
+      "sell_demand": {
+        "value": 105952034297.65999,
+        "orders": 89,
+        "volume": 1900451072,
+        "volume_24h": 640572278
+      }
     }
   ],
   "Isogen": [
@@ -12603,6 +12657,24 @@
         "value": 73303392357.60002,
         "orders": 58,
         "volume": 374008735,
+        "volume_24h": 251874384
+      }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 171.8,
+      "sell": 186.8,
+      "avg": 179.3,
+      "buy_demand": {
+        "value": 40797983859.1,
+        "orders": 42,
+        "volume": 250098463,
+        "volume_24h": 251874384
+      },
+      "sell_demand": {
+        "value": 66591606139.60001,
+        "orders": 55,
+        "volume": 339605623,
         "volume_24h": 251874384
       }
     }
@@ -15757,6 +15829,24 @@
         "volume": 163664608,
         "volume_24h": 77558976
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 622.2,
+      "sell": 689.9,
+      "avg": 656.05,
+      "buy_demand": {
+        "value": 31507354531.1,
+        "orders": 45,
+        "volume": 52842877,
+        "volume_24h": 77558976
+      },
+      "sell_demand": {
+        "value": 139263937203.40002,
+        "orders": 66,
+        "volume": 189465198,
+        "volume_24h": 77558976
+      }
     }
   ],
   "Zydrine": [
@@ -18907,6 +18997,24 @@
         "value": 121920200485.0,
         "orders": 53,
         "volume": 104910848,
+        "volume_24h": 38165912
+      }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 961.0,
+      "sell": 1056.0,
+      "avg": 1008.5,
+      "buy_demand": {
+        "value": 8196363.0,
+        "orders": 1,
+        "volume": 7653,
+        "volume_24h": 38165912
+      },
+      "sell_demand": {
+        "value": 107516281516.0,
+        "orders": 54,
+        "volume": 91624246,
         "volume_24h": 38165912
       }
     }
@@ -22061,6 +22169,24 @@
         "volume": 78104765,
         "volume_24h": 30533000
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 1809.0,
+      "sell": 1895.0,
+      "avg": 1852.0,
+      "buy_demand": {
+        "value": 38519860546.0,
+        "orders": 47,
+        "volume": 22828627,
+        "volume_24h": 30533000
+      },
+      "sell_demand": {
+        "value": 185792714381.0,
+        "orders": 94,
+        "volume": 78596887,
+        "volume_24h": 30533000
+      }
     }
   ],
   "Morphite": [
@@ -25213,6 +25339,24 @@
         "volume": 5816130,
         "volume_24h": 2577748
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 17240.0,
+      "sell": 17900.0,
+      "avg": 17570.0,
+      "buy_demand": {
+        "value": 62368292190.0,
+        "orders": 52,
+        "volume": 4018198,
+        "volume_24h": 2577748
+      },
+      "sell_demand": {
+        "value": 143476780210.0,
+        "orders": 54,
+        "volume": 5649945,
+        "volume_24h": 2577748
+      }
     }
   ],
   "PLEX": [
@@ -28353,6 +28497,24 @@
       "buy": 4776000.0,
       "sell": 4978000.0,
       "avg": 4877000.0,
+      "buy_demand": {
+        "value": 0,
+        "orders": 0,
+        "volume": 0,
+        "volume_24h": 0
+      },
+      "sell_demand": {
+        "value": 0,
+        "orders": 0,
+        "volume": 0,
+        "volume_24h": 0
+      }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 4770000.0,
+      "sell": 4873000.0,
+      "avg": 4821500.0,
       "buy_demand": {
         "value": 0,
         "orders": 0,
@@ -31517,6 +31679,24 @@
         "volume": 1820,
         "volume_24h": 2965
       }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 450000000.0,
+      "sell": 467000000.0,
+      "avg": 458500000.0,
+      "buy_demand": {
+        "value": 256966527340.0,
+        "orders": 69,
+        "volume": 1291,
+        "volume_24h": 2965
+      },
+      "sell_demand": {
+        "value": 1226703900000.0,
+        "orders": 156,
+        "volume": 1639,
+        "volume_24h": 2965
+      }
     }
   ],
   "Large Skill Injector": [
@@ -34667,6 +34847,24 @@
         "value": 88359100000.0,
         "orders": 36,
         "volume": 582,
+        "volume_24h": 242
+      }
+    },
+    {
+      "date": "2026-10-29",
+      "buy": 704000000.0,
+      "sell": 737400000.0,
+      "avg": 720700000.0,
+      "buy_demand": {
+        "value": 13339859400.0,
+        "orders": 29,
+        "volume": 290,
+        "volume_24h": 242
+      },
+      "sell_demand": {
+        "value": 83122100000.0,
+        "orders": 30,
+        "volume": 547,
         "volume_24h": 242
       }
     }
